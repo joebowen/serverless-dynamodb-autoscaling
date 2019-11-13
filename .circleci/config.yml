@@ -3,10 +3,10 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:6.10.0
+      - image: circleci/node:6.10.1
     steps:
       - checkout
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/serverless-dynamodb-autoscaling/.npmrc
+      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/serverless-kinesis-autoscaling/.npmrc
       - run: $(yarn bin)/dot-json package.json version ${CIRCLE_TAG:1}
       - run: npm publish
   test:

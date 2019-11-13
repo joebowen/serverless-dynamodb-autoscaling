@@ -1,34 +1,34 @@
-# ⚡️ Serverless Plugin for DynamoDB Auto Scaling
+# ⚡️ Serverless Plugin for Kinesis Auto Scaling
 
-[![npm](https://img.shields.io/npm/v/serverless-dynamodb-autoscaling.svg)](https://www.npmjs.com/package/serverless-dynamodb-autoscaling)
-[![CircleCI](https://img.shields.io/circleci/project/github/sbstjn/serverless-dynamodb-autoscaling/master.svg)](https://circleci.com/gh/sbstjn/serverless-dynamodb-autoscaling)
-[![license](https://img.shields.io/github/license/sbstjn/serverless-dynamodb-autoscaling.svg)](https://github.com/sbstjn/serverless-dynamodb-autoscaling/blob/master/LICENSE.md)
-[![Coveralls](https://img.shields.io/coveralls/sbstjn/serverless-dynamodb-autoscaling.svg)](https://coveralls.io/github/sbstjn/serverless-dynamodb-autoscaling)
+[![npm](https://img.shields.io/npm/v/serverless-kinesis-autoscaling.svg)](https://www.npmjs.com/package/serverless-kinesis-autoscaling)
+[![CircleCI](https://img.shields.io/circleci/project/github/joebowen/serverless-kinesis-autoscaling/master.svg)](https://circleci.com/gh/joebowen/serverless-kinesis-autoscaling)
+[![license](https://img.shields.io/github/license/joebowen/serverless-kinesis-autoscaling.svg)](https://github.com/joebowen/serverless-kinesis-autoscaling/blob/master/LICENSE.md)
+[![Coveralls](https://img.shields.io/coveralls/joebowen/serverless-kinesis-autoscaling.svg)](https://coveralls.io/github/joebowen/serverless-kinesis-autoscaling)
 
 With this plugin for [serverless](https://serverless.com), you can enable DynamoDB Auto Scaling for tables and **Global Secondary Indexes** easily in your `serverless.yml` configuration file. The plugin supports multiple tables and indexes, as well as separate configuration for `read` and `write` capacities using Amazon's [native DynamoDB Auto Scaling](https://aws.amazon.com/blogs/aws/new-auto-scaling-for-amazon-dynamodb/).
 
 ## Usage
 
-Add the [NPM package](https://www.npmjs.com/package/serverless-dynamodb-autoscaling) to your project:
+Add the [NPM package](https://www.npmjs.com/package/serverless-kinesis-autoscaling) to your project:
 
 ```bash
 # Via yarn
-$ yarn add serverless-dynamodb-autoscaling
+$ yarn add serverless-kinesis-autoscaling
 
 # Via npm
-$ npm install serverless-dynamodb-autoscaling
+$ npm install serverless-kinesis-autoscaling
 ```
 
 Add the plugin to your `serverless.yml`:
 
 ```yaml
 plugins:
-  - serverless-dynamodb-autoscaling
+  - serverless-kinesis-autoscaling
 ```
 
 ## Configuration
 
-Configure DynamoDB Auto Scaling in `serverless.yml` with references to your DynamoDB CloudFormation resources for the `table` property. The `index` configuration is optional to apply Auto Scaling *Global Secondary Index*.
+Configure Kinesis Auto Scaling in `serverless.yml` with references to your Kinesis CloudFormation resources for the `table` property. The `index` configuration is optional to apply Auto Scaling *Global Secondary Index*.
 
 ```yaml
 custom:
@@ -134,5 +134,5 @@ $ > yarn build:watch # or "yarn build"
 Use your local build of the package in another project:
 
 ```
-$ > yarn link serverless-dynamodb-autoscaling
+$ > yarn link serverless-kinesis-autoscaling
 ```

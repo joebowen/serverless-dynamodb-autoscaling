@@ -1,7 +1,7 @@
 {
-  "name": "serverless-dynamodb-autoscaling",
-  "description": "Serverless Plugin for Amazon DynamoDB Auto Scaling.",
-  "homepage": "https://sbstjn.com/serverless-dynamodb-auto-scaling-with-cloudformation.html",
+  "name": "serverless-kinesis-autoscaling",
+  "description": "Serverless Plugin for Amazon Kinesis Auto Scaling.",
+  "homepage": "https://github.com/joebowen/serverless-kinesis-autoscaling",
   "version": "0.0.0",
   "main": "dist/plugin.js",
   "scripts": {
@@ -17,21 +17,21 @@
     "serverless",
     "sls",
     "plugin",
-    "dynamodb",
+    "kinesis",
     "cloudformation",
     "autoscaling",
     "auto-scaling",
     "amazon",
     "aws"
   ],
-  "author": "Sebastian Müller <mail@sbstjn.com>",
+  "author": "Joe Bowen <joe.b.bowen@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sbstjn/serverless-dynamodb-autoscaling.git"
+    "url": "https://github.com/joebowen/serverless-kinesis-autoscaling.git"
   },
   "bugs": {
-    "url": "https://github.com/sbstjn/serverless-dynamodb-autoscaling/issues"
+    "url": "https://github.com/joebowen/serverless-kinesis-autoscaling/issues"
   },
   "devDependencies": {
     "@types/jest": "^20.0.5",

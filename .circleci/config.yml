@@ -28,9 +28,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-	      # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       - run: yarn lint
       - run: yarn test:cover
@@ -43,9 +43,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       - persist_to_workspace:
-           root: ~/repo
-           paths: .
-        
+          root: ~/repo
+          paths: .
+
 workflows:
   build_and_test:
     jobs:

@@ -16,14 +16,14 @@ export default class Policy extends Resource {
     const PolicyName = this.name.policyScale(this.read)
     const Target = this.name.target(this.read)
 
-    const DependsOn = [ this.options.table, Target ].concat(this.dependencies)
+    const DependsOn = [ this.options.stream, Target ].concat(this.dependencies)
 
     return {
       [PolicyName]: {
         DependsOn,
         Properties: {
           PolicyName,
-          PolicyType: 'TargetTrackingScaling',
+          PolicyType: 'StepScaling',
           ScalingTargetId: { Ref: Target },
           TargetTrackingScalingPolicyConfiguration: {
             PredefinedMetricSpecification: {

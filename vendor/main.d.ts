@@ -1,9 +1,6 @@
 declare interface Capacity {
-  table: string | string[]
-  index: string | string[]
-  indexOnly?: boolean
-  write?: CapacityConfiguration
-  read?: CapacityConfiguration
+  stream: string | string[]
+  shards?: CapacityConfiguration
 }
 
 declare interface CapacityConfiguration {
@@ -13,11 +10,10 @@ declare interface CapacityConfiguration {
 }
 
 declare interface Options {
-  index: string
   region: string
   service: string
   stage: string
-  table: string
+  stream: string
 }
 
 /**

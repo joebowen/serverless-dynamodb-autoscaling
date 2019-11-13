@@ -11,17 +11,13 @@ export default class Target extends Resource {
   ) { super(options) }
 
   public toJSON(): any {
-    const resource = [ 'table/', { Ref: this.options.table } ]
-
-    if (this.options.index !== '') {
-      resource.push('/index/', this.options.index)
-    }
+    const resource = [ 'stream/', { Ref: this.options.stream } ]
 
     const nameTarget = this.name.target(this.read)
     const nameRole = this.name.role()
     const nameDimension = this.name.dimension(this.read)
 
-    const DependsOn = [ this.options.table, nameRole ].concat(this.dependencies)
+    const DependsOn = [ this.options.stream, nameRole ].concat(this.dependencies)
 
     return {
       [nameTarget]: {
@@ -32,7 +28,7 @@ export default class Target extends Resource {
           ResourceId: { 'Fn::Join': [ '', resource ] },
           RoleARN: { 'Fn::GetAtt': [ nameRole, 'Arn' ] },
           ScalableDimension: nameDimension,
-          ServiceNamespace: 'dynamodb'
+          ServiceNamespace: 'kinesis'
         },
         Type: this.type
       }

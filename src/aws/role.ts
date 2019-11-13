@@ -11,9 +11,9 @@ export default class Role extends Resource {
       'cloudwatch:GetMetricStatistics',
       'cloudwatch:SetAlarmState'
     ],
-    DynamoDB: [
-      'dynamodb:DescribeTable',
-      'dynamodb:UpdateTable'
+    Kinesis: [
+      'kinesis:Describe*',
+      'kinesis:UpdateShardCount'
     ]
   }
 
@@ -25,7 +25,7 @@ export default class Role extends Resource {
     const RoleName = this.name.role()
     const PolicyName = this.name.policyRole()
 
-    const DependsOn = [ this.options.table ].concat(this.dependencies)
+    const DependsOn = [ this.options.stream ].concat(this.dependencies)
     const Principal = this.principal()
     const Version = this.version
     const Type = this.type
@@ -45,7 +45,7 @@ export default class Role extends Resource {
               PolicyDocument: {
                 Statement: [
                   { Action: this.actions.CloudWatch, Effect: 'Allow', Resource: '*' },
-                  { Action: this.actions.DynamoDB, Effect: 'Allow', Resource: this.resource() }
+                  { Action: this.actions.Kinesis, Effect: 'Allow', Resource: this.resource() }
                 ],
                 Version
               },
@@ -61,7 +61,7 @@ export default class Role extends Resource {
 
   private resource(): {} {
     return {
-      'Fn::Join': [ '', [ 'arn:aws:dynamodb:*:', { Ref: 'AWS::AccountId' }, ':table/', { Ref: this.options.table } ] ]
+      'Fn::Join': [ '', [ 'arn:aws:kinesis:*:', { Ref: 'AWS::AccountId' }, ':stream/', { Ref: this.options.stream } ] ]
     }
   }
 

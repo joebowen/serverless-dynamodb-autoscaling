@@ -7,21 +7,20 @@ import Role from './aws/role'
 import Target from './aws/target'
 
 const text = {
-  CLI_DONE: 'Added DynamoDB Auto Scaling to CloudFormation!',
-  CLI_RESOURCE: ' - Building configuration for resource "table/%s%s"',
-  CLI_SKIP: 'Skipping DynamoDB Auto Scaling: %s!',
-  CLI_START: 'Configure DynamoDB Auto Scaling …',
+  CLI_DONE: 'Added Kinesis Auto Scaling to CloudFormation!',
+  CLI_RESOURCE: ' - Building configuration for resource "stream/%s%s"',
+  CLI_SKIP: 'Skipping Kinesis Auto Scaling: %s!',
+  CLI_START: 'Configure Kinesis Auto Scaling …',
   INVALID_CONFIGURATION: 'Invalid serverless configuration',
   NO_AUTOSCALING_CONFIG: 'Not Auto Scaling configuration found',
   ONLY_AWS_SUPPORT: 'Only supported for AWS provicer'
 }
 
 interface Defaults {
-  read: CapacityConfiguration,
-  write: CapacityConfiguration
+  shards: CapacityConfiguration
 }
 
-class AWSDBAutoScaling {
+class AWSKinesisAutoScaling {
   public hooks: {}
 
   /**
@@ -73,36 +72,30 @@ class AWSDBAutoScaling {
    */
   private defaults(config: Capacity): Defaults {
     return {
-      read: {
-        maximum: config.read && config.read.maximum ? config.read.maximum : 200,
-        minimum: config.read && config.read.minimum ? config.read.minimum : 5,
-        usage: config.read && config.read.usage ? config.read.usage : 0.75
-      },
-      write: {
-        maximum: config.write && config.write.maximum ? config.write.maximum : 200,
-        minimum: config.write && config.write.minimum ? config.write.minimum : 5,
-        usage: config.write && config.write.usage ? config.write.usage : 0.75
+      shards: {
+        maximum: config.shards && config.shards.maximum ? config.shards.maximum : 200,
+        minimum: config.shards && config.shards.minimum ? config.shards.minimum : 5,
+        usage: config.shards && config.shards.usage ? config.shards.usage : 0.75
       }
     }
   }
 
   /**
-   * Create CloudFormation resources for table (and optional index)
+   * Create CloudFormation resources for stream (and optional index)
    */
-  private resources(table: string, index: string, config: Capacity): any[] {
+  private resources(stream: string, config: Capacity): any[] {
     const data = this.defaults(config)
 
     const options: Options = {
-      index,
       region: this.getRegion(),
       service: this.getServiceName(),
       stage: this.getStage(),
-      table
+      stream
     }
 
     // Start processing configuration
     this.serverless.cli.log(
-      util.format(text.CLI_RESOURCE, table, (index ? ('/index/' + index) : ''))
+      util.format(text.CLI_RESOURCE, stream)
     )
 
     // Add role to manage Auto Scaling policies
@@ -111,13 +104,8 @@ class AWSDBAutoScaling {
     ]
 
     // Only add Auto Scaling for read capacity if configuration set is available
-    if (!!config.read) {
-      resources.push(...this.getPolicyAndTarget(options, data.read, true))
-    }
-
-    // Only add Auto Scaling for write capacity if configuration set is available
-    if (!!config.write) {
-      resources.push(...this.getPolicyAndTarget(options, data.write, false))
+    if (!!config.shards) {
+      resources.push(...this.getPolicyAndTarget(options, data.shards, true))
     }
 
     return resources
@@ -134,27 +122,18 @@ class AWSDBAutoScaling {
   }
 
   /**
-   * Generate CloudFormation resources for DynamoDB table and indexes
+   * Generate CloudFormation resources for Kinesis stream
    */
-  private generate(table: string, config: Capacity) {
+  private generate(stream: string, config: Capacity) {
     let resources: any[] = []
     let lastRessources: any[] = []
 
-    const indexes = this.normalize(config.index)
-    if (!config.indexOnly) {
-      indexes.unshift('') // Horrible solution
-    }
-
-    indexes.forEach(
-      (index: string) => {
-        const current = this.resources(table, index, config).map(
-          (resource: any) => resource.setDependencies(lastRessources).toJSON()
-        )
-
-        resources = resources.concat(current)
-        lastRessources = current.map((item: any) => Object.keys(item).pop())
-      }
+    const current = this.resources(stream, config).map(
+      (resource: any) => resource.setDependencies(lastRessources).toJSON()
     )
+
+    resources = resources.concat(current)
+    lastRessources = current.map((item: any) => Object.keys(item).pop())
 
     return resources
   }
@@ -175,10 +154,10 @@ class AWSDBAutoScaling {
    */
   private process() {
     this.serverless.service.custom.capacities.filter(
-      (config: Capacity) => !!config.read || !!config.write
+      (config: Capacity) => !!config.shards
     ).forEach(
-      (config: Capacity) => this.normalize(config.table).forEach(
-        (table: string) => this.generate(table, config).forEach(
+      (config: Capacity) => this.normalize(config.stream).forEach(
+        (stream: string) => this.generate(stream, config).forEach(
           (resource: string) => _.merge(
             this.serverless.service.provider.compiledCloudFormationTemplate.Resources,
             resource
@@ -203,4 +182,4 @@ class AWSDBAutoScaling {
   }
 }
 
-module.exports = AWSDBAutoScaling
+module.exports = AWSKinesisAutoScaling

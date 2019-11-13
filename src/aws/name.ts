@@ -2,11 +2,11 @@ import * as md5 from 'md5'
 import * as util from 'util'
 
 const TEXT = {
-  DIMENSION: 'dynamodb:%s:%sCapacityUnits',
-  METRIC: 'DynamoDB%sCapacityUtilization',
-  POLICYROLE: 'DynamoDBAutoscalePolicy',
-  POLICYSCALE: 'TableScalingPolicy-%s',
-  ROLE: 'DynamoDBAutoscaleRole',
+  DIMENSION: 'kinesis:%s:%sCapacityUnits',
+  METRIC: 'Kinesis%sCapacityUtilization',
+  POLICYROLE: 'KinesisAutoscalePolicy',
+  POLICYSCALE: 'StreamScalingPolicy-%s',
+  ROLE: 'KinesisAutoscaleRole',
   TARGET: 'AutoScalingTarget-%s'
 }
 
@@ -97,8 +97,7 @@ export default class Name {
 
   private suffix(): string {
     return [
-      this.options.table,
-      this.options.index,
+      this.options.stream,
       this.options.stage,
       this.options.region
     ].map(
